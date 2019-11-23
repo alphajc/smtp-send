@@ -13,7 +13,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="smtp-send",
-    version="0.0.3a1",
+    version="0.0.3",
     description="命令行邮件发送工具",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -34,7 +34,7 @@ setup(
     packages=find_packages("."),
     entry_points={
         "console_scripts": [
-            "smtp-send = src.smtp_send:main"
+            "smtp-send = smtp_send.smtp_send:main"
         ]
     },
 )

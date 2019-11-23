@@ -3,6 +3,7 @@
 import os
 import smtplib
 import argparse
+import json
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -12,9 +13,14 @@ from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=os.getcwd() + '/.env')
 
-def render(template):
-    tpl = Template(open(template, 'r').read())
-    return tpl.render(datetime=os.environ.get('DATETIME'))
+def render(template, meta_json):
+    with open(template, 'r') as f:
+        tpl = Template(f.read())
+    with open(meta_json, 'r') as f:
+        metadata = json.loads(f.read())
+    configmaps = metadata['configmaps']
+    model = dict(zip(configmaps.keys(), map(lambda v: os.environ.get(v), configmaps.values())))
+    return tpl.render(**model)
 
 def main():
     parser = argparse.ArgumentParser(prog='send-email', description='邮件发送工具')
@@ -32,6 +38,7 @@ def main():
     parser.add_argument('--cc', help='抄送，多个收件人间用英文逗号分隔')
     parser.add_argument('--bcc', help='密送，多个收件人间用英文逗号分隔')
     parser.add_argument('--render', help='待渲染文件')
+    parser.add_argument('--meta', help='元数据，json格式的文件')
 
     args = parser.parse_args()
 
@@ -55,9 +62,10 @@ def main():
     message['Subject'] = Header(args.subject, 'utf-8')
 
     if text:
-        message.attach(MIMEText(open(text, 'r').read(), 'plain', 'utf-8'))
+        with open(text, 'r') as f:
+            message.attach(MIMEText(f.read(), 'plain', 'utf-8'))
     else:
-        message.attach(MIMEText(render(args.render), 'plain', 'utf-8'))
+        message.attach(MIMEText(render(args.render, args.meta), 'plain', 'utf-8'))
 
     for attachment in attachments:
         att = MIMEText(open(attachment, 'rb').read(), 'base64', 'utf-8')
