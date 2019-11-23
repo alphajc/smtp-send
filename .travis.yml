@@ -1,7 +1,8 @@
 language: python
 python:
   - "3.6"
-script: []
+script:
+  - exit 0
 deploy:
   provider: pypi
   user: jerryc
