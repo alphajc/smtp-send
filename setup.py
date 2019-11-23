@@ -9,11 +9,11 @@ with open(os.path.join(here, "README.md"), "r", encoding="utf-8") as fobj:
     long_description = fobj.read()
 
 with open('requirements.txt') as f:
-    requirements = f.read().splitlines() or []
+    requirements = f.read().splitlines()
 
 setup(
     name="smtp-send",
-    version="0.0.1a1",
+    version="0.0.3a1",
     description="命令行邮件发送工具",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -30,7 +30,6 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords=["smtp-send", "send-email", "pysendemail", "sendemail", "email"],
-    requires=requirements,
     install_requires=requirements,
     packages=find_packages("."),
     entry_points={

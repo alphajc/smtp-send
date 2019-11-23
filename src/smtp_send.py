@@ -3,17 +3,26 @@
 import os
 import smtplib
 import argparse
+
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
+from jinja2 import Template
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=os.getcwd() + '/.env')
+
+def render(template):
+    tpl = Template(open(template, 'r').read())
+    return tpl.render(datetime=os.environ.get('DATETIME'))
 
 def main():
     parser = argparse.ArgumentParser(prog='send-email', description='邮件发送工具')
 
-    parser.add_argument('--text', help="正文路径", required=True)
+    parser.add_argument('--text', help="正文路径")
     parser.add_argument('--attachments', '-a', help='附件', nargs="*")
     parser.add_argument('--subject', '-s', help='主题', required=True)
-    parser.add_argument('--recipients', help='收件人，多个收件人间用英文逗号分隔', required=True)
+    parser.add_argument('--recipients', help='收件人，多个收件人间用英文逗号分隔')
     parser.add_argument('--sender', help='发件人')
     parser.add_argument('--smtp-addr', help='SMTP 服务器地址')
     parser.add_argument('--smtp-port', help='SMTP 服务器端口')
@@ -22,6 +31,7 @@ def main():
     parser.add_argument('--ssl', help='是否开启ssl', action='store_true')
     parser.add_argument('--cc', help='抄送，多个收件人间用英文逗号分隔')
     parser.add_argument('--bcc', help='密送，多个收件人间用英文逗号分隔')
+    parser.add_argument('--render', help='待渲染文件')
 
     args = parser.parse_args()
 
@@ -32,7 +42,8 @@ def main():
     smtp_user = args.smtp_user or os.environ.get('SMTP_USER')
     smtp_password = args.smtp_password or os.environ.get('SMTP_PASSWORD')
     sender = args.sender or os.environ.get('SENDER') or smtp_user
-    recipients = args.recipients.split(',') or os.environ.get('RECIPIENTS')
+    recipients_line = args.recipients or os.environ.get('RECIPIENTS')
+    recipients = recipients_line.split(',')
     if args.cc: recipients += args.cc.split(',')
     if args.bcc: recipients += args.bcc.split(',')
 
@@ -43,7 +54,10 @@ def main():
     message['Bcc'] = args.bcc
     message['Subject'] = Header(args.subject, 'utf-8')
 
-    message.attach(MIMEText(open(text, 'r').read(), 'plain', 'utf-8'))
+    if text:
+        message.attach(MIMEText(open(text, 'r').read(), 'plain', 'utf-8'))
+    else:
+        message.attach(MIMEText(render(args.render), 'plain', 'utf-8'))
 
     for attachment in attachments:
         att = MIMEText(open(attachment, 'rb').read(), 'base64', 'utf-8')

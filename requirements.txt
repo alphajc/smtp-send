@@ -1,0 +1,2 @@
+python-dotenv==0.10.3
+jinja2==2.10.3
