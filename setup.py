@@ -13,7 +13,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="smtp-send",
-    version="0.0.3",
+    version="0.0.4",
     description="命令行邮件发送工具",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -31,10 +31,11 @@ setup(
     ],
     keywords=["smtp-send", "send-email", "pysendemail", "sendemail", "email"],
     install_requires=requirements,
-    packages=find_packages("."),
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     entry_points={
         "console_scripts": [
-            "smtp-send = smtp_send.smtp_send:main"
+            "smtp-send = smtp_send.cli:main"
         ]
     },
 )
