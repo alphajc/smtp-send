@@ -1,5 +1,6 @@
 # smtp-send
 
+[![Actions](https://github.com/canovie/smtp-send/workflows/Upload%20Python%20Package/badge.svg)](https://github.com/canovie/smtp-send/actions)
 [![PyPI](https://img.shields.io/pypi/v/smtp-send)](https://pypi.org/project/smtp-send)
 
 由于在自动化环境中大量依赖环境变量和命令行参数的行式传参，我想在此基础上去完善一个可发送邮件的命令行工具。主要功能包括：
@@ -10,7 +11,6 @@
 - 支持多附件
 - 支持 HTML *
 - 支持 MarkDown *
-- 支持命令行正文 *
 
 > 注：「*」为待开发
 
@@ -81,6 +81,3 @@ __注：__
     ```
     2019年11月23日
     ```
-### 附件
-
-可以添加任意数量的 `-a/--attachments` 参数添加附件
