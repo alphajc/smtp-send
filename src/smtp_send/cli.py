@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 from dotenv import load_dotenv
 from email.utils import parseaddr
@@ -49,8 +50,12 @@ def main():
     elif args.render and args.meta:
         text_content = Tools.render(args.render, args.meta)
     else:
-        print('无法获取邮件正文')
-        exit(1)
+        text_content = sys.stdin.read()
+        print(text_content)
+        if not text_content:
+            print('无法获取邮件正文')
+            exit(1)
+
     letter.attach_text(text_content)
 
     for attachment in attachments:

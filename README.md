@@ -17,7 +17,7 @@
 ## 使用说明
 
 ```
-usage: send-email [-h] [--text TEXT]
+usage: smtp-send [-h] [--text TEXT]
                   [--attachments [ATTACHMENTS [ATTACHMENTS ...]]] --subject
                   SUBJECT [--recipients RECIPIENTS] [--sender SENDER]
                   [--smtp-addr SMTP_ADDR] [--smtp-port SMTP_PORT]
@@ -55,6 +55,7 @@ optional arguments:
 __注：__
 1. `--render`和`--meta`需同时指定，正文渲染才有效
 2. 如果`--text`被指定，则正文内容为其所指定项
+3. 除了上述两种方式，新添加了从标准输入获取正文的方式
 
 ### 正文渲染
 
