@@ -25,8 +25,8 @@ class Letter:
         self.message['Subject'] = Header(subject, 'utf-8')
         self.message['From'] = formataddr((Header(envelope['sender'][0], 'utf-8').encode(), envelope['sender'][1]))
         self.message['To'] = ','.join([formataddr((Header(i[0], 'utf-8').encode(), i[1])) for i in envelope['to']])
-        self.message['Cc'] = ','.join([formataddr((Header(i[0], 'utf-8').encode(), i[1])) for i in envelope['cc']])
-        self.message['Bcc'] = ','.join([formataddr((Header(i[0], 'utf-8').encode(), i[1])) for i in envelope['bcc']])
+        self.message['Cc'] = ','.join([formataddr((Header(i[0], 'utf-8').encode(), i[1])) for i in envelope['cc']]) if envelope['cc'] else None
+        self.message['Bcc'] = ','.join([formataddr((Header(i[0], 'utf-8').encode(), i[1])) for i in envelope['bcc']]) if envelope['bcc'] else None
 
     def attach_text(self, text: str):
         """添加正文
